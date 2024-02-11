@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>speedtest.net Server Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="top">
+            <h1>speedtest.net Server Search</h1>
+            <p>Provided by <a href="https://1234000.xyz">1234000 Services</a></p>
+            <!--This site was created completely by ChatGPT! I have no idea how to code... :)-->
+            <br>
+            <!-- <p>Before the search will work, you need to request access to the <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">CORS anywhere demo server</a>.</p><br> -->
+            <div class="search-bar">
+                <input type="text" name="search" placeholder="Search...">
+                <button type="button" name="button">Search</button>
+            </div>
+        </div>
+        <div class="separator"></div>
+        <div class="results">
+            <pre><code>
+            </code></pre>
+        </div>
+    </div>
+    <script>
+        // CORS bypass
+        // const cors_anywhere_url = "https://cors-anywhere.herokuapp.com/";
+        const cors_anywhere_url = "https://cors-proxy.1234000.workers.dev/";
+
+        // Add event listener to search button
+        document.querySelector('button[name="button"]').addEventListener("click", function() {
+            // Get search query
+            let query = document.querySelector('input[name="search"]').value;
+
+            // Make the API call
+            let xhr = new XMLHttpRequest();
+            let url = cors_anywhere_url + "?https://www.speedtest.net/api/js/servers?engine=js&search=" + query + "&https_functional=true&limit=100";
+            xhr.open("GET", url);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Parse the response and prettify the JSON
+                    let response = JSON.parse(xhr.responseText);
+                    let jsonPretty = JSON.stringify(response, null, 4);
+
+                    // Display the results
+                    document.querySelector("div.results pre code").innerHTML = jsonPretty;
+
+                    // Highlight the line containing the json key called "id"
+                    let lines = document.querySelector("div.results pre code").innerHTML.split("\n");
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i].includes('"id":')) {
+                            lines[i] = '<span style="color: red;">' + lines[i] + '</span>';
+                        }
+                    }
+                    document.querySelector("div.results pre code").innerHTML = lines.join("\n");
+                }
+            };
+            xhr.send();
+        });
+        
+        // Add event listener to search input
+        document.querySelector('input[name="search"]').addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                document.querySelector('button[name="button"]').click();
+            }
+        });
+    </script>
+</body>
+</html>
