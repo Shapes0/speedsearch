@@ -55,3 +55,72 @@ a {
 .results {
     font-size: 14px;
 }
+
+.server-box {
+    background-color: #545454;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #ececec; /* Default text color */
+}
+
+.server-box h2 {
+    color: #72bcd4; /* Light blue color */
+    font-weight: bold; /* Bold font weight */
+    margin-bottom: 5px;
+}
+
+.server-box strong {
+    font-weight: bold; /* Bold font weight */
+}
+
+.server-box p {
+    margin-bottom: 5px;
+}
+
+.server-box .code {
+    font-family: monospace; /* Monospace font for URL and host */
+}
+
+.long-text {
+    max-width: calc(100% - 40px); /* Adjust the value accordingly */
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.name-country {
+    font-size: 14px; /* Smaller font size for name and country */
+    margin-top: 3px; /* Adjust the margin between sponsor and name-country */
+    margin-bottom: 10px; /* Adjust the margin between name-country and the separating line */
+}
+
+.separator {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #ececec; /* Separator color */
+}
+
+/* Add media query for mobile devices */
+@media screen and (max-width: 600px) {
+    .top {
+        font-size: 24px; /* Increase font size for top section on mobile */
+    }
+
+    .top h2 {
+        font-size: 22px; /* Adjust font size of h2 within .top for mobile */
+    }
+
+    .top p {
+        font-size: 20px; /* Adjust font size of p within .top for mobile */
+    }
+
+    .search-bar input {
+        width: 90%; /* Adjust input width for better display on mobile */
+        font-size: 14px; /* Decrease font size for input on mobile */
+    }
+
+    .search-bar button {
+        font-size: 14px; /* Decrease font size for button on mobile */
+        margin-top: 10px;
+    }
+}

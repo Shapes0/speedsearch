@@ -1,75 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>speedtest.net Server Search</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Search for speedtest.net servers and server IDs.">
+    <meta name="keywords" content="speedtest, servers, 1234000 Services, ookla, search">
+    <meta name="author" content="1234000 Services">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="speedtest.net Server Search - Speedsearch">
+    <meta property="og:description" content="Search for speedtest.net servers and server IDs.">
+    <meta property="og:url" content="https://speedsearch.1234000.xyz">
+    <meta property="og:type" content="website">
+
+
+    <title>speedtest.net Server Search - Speedsearch</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="top">
-            <h1>speedtest.net Server Search</h1>
+            <h1>Speedsearch</h1>
+            <h2>speedtest.net Server Search</h2>
             <p>Provided by <a href="https://1234000.xyz">1234000 Services</a></p>
-            <!--This site was created completely by ChatGPT! I have no idea how to code... :)-->
-            <br>
-            <!-- <p>Before the search will work, you need to request access to the <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank">CORS anywhere demo server</a>.</p><br> -->
             <div class="search-bar">
                 <input type="text" name="search" placeholder="Search...">
                 <button type="button" name="button">Search</button>
             </div>
         </div>
         <div class="separator"></div>
-        <div class="results">
-            <pre><code>
-            </code></pre>
-        </div>
+        <div class="results"></div>
     </div>
     <script>
-        // CORS bypass
-        // const cors_anywhere_url = "https://cors-anywhere.herokuapp.com/";
-        const cors_anywhere_url = "https://cors-proxy.1234000.workers.dev/";
+        // Function to fetch server data based on search query
+        function fetchServerData() {
+            // Get search query, trim white space, and encode it
+            let query = encodeURIComponent(document.querySelector('input[name="search"]').value.trim());
+
+            // Create a script element to make a JSONP request
+            const script = document.createElement('script');
+            script.src = `https://www.speedtest.net/api/js/servers?engine=js&search=${query}&limit=100&callback=handleResponse`;
+            document.body.appendChild(script);
+        }
 
         // Add event listener to search button
-        document.querySelector('button[name="button"]').addEventListener("click", function() {
-            // Get search query
-            let query = document.querySelector('input[name="search"]').value;
+        document.querySelector('button[name="button"]').addEventListener("click", fetchServerData);
 
-            // Make the API call
-            let xhr = new XMLHttpRequest();
-            let url = cors_anywhere_url + "?https://www.speedtest.net/api/js/servers?engine=js&search=" + query + "&https_functional=true&limit=100";
-            xhr.open("GET", url);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Parse the response and prettify the JSON
-                    let response = JSON.parse(xhr.responseText);
-                    let jsonPretty = JSON.stringify(response, null, 4);
-
-                    // Display the results
-                    document.querySelector("div.results pre code").innerHTML = jsonPretty;
-
-                    // Highlight the line containing the json key called "id"
-                    let lines = document.querySelector("div.results pre code").innerHTML.split("\n");
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].includes('"id":')) {
-                            lines[i] = '<span style="color: red;">' + lines[i] + '</span>';
-                        }
-                    }
-                    document.querySelector("div.results pre code").innerHTML = lines.join("\n");
-                }
-            };
-            xhr.send();
-        });
-        
-        // Add event listener to search input
-        document.querySelector('input[name="search"]').addEventListener("keyup", function(event) {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                // Cancel the default action, if needed
-                event.preventDefault();
-                // Trigger the button element with a click
-                document.querySelector('button[name="button"]').click();
+        // Add event listener to document body for typing event
+        document.body.addEventListener("keypress", function(event) {
+            // Check if the typing is done in the search input field
+            if (event.target.matches('input[name="search"]')) {
+                return;
             }
+            // Focus on the search input when typing starts
+            document.querySelector('input[name="search"]').focus();
         });
+
+        // Add event listener to search input for live update
+        document.querySelector('input[name="search"]').addEventListener("input", fetchServerData);
+
+        // Define a callback function to handle the JSONP response
+        function handleResponse(response) {
+            // Display the results
+            const resultsContainer = document.querySelector(".results");
+            resultsContainer.innerHTML = "";
+
+            response.forEach(server => {
+                const serverBox = document.createElement("div");
+                serverBox.classList.add("server-box");
+
+                const sponsor = document.createElement("h2");
+                sponsor.textContent = server.sponsor;
+                serverBox.appendChild(sponsor);
+
+                const nameCountry = document.createElement("p");
+                nameCountry.textContent = server.name + " - " + server.country;
+                nameCountry.classList.add("name-country");
+                serverBox.appendChild(nameCountry);
+
+                const line = document.createElement("hr");
+                serverBox.appendChild(line);
+
+                const serverInfo = document.createElement("p");
+                serverInfo.innerHTML = `
+                    <strong>Server ID:</strong> ${server.id}<br>
+                    <strong>Distance:</strong> ${server.distance} mi<br>
+                    <strong>Latitude:</strong> ${server.lat}<br>
+                    <strong>Longitude:</strong> ${server.lon}<br>
+                    <strong>Preferred:</strong> ${server.preferred ? "yes" : "no"}<br>
+                    <strong>URL:</strong><br> <span class="long-text code" style="font-size: 12px;">${server.url}</span><br>
+                    <strong>Host:</strong><br> <span class="long-text code" style="font-size: 12px;">${server.host}</span><br><br>
+                `;
+                serverBox.appendChild(serverInfo);
+
+                resultsContainer.appendChild(serverBox);
+            });
+        }
+        fetchServerData();
+        // Focus on the search input when the page loads
+        window.onload = function() {
+            document.querySelector('input[name="search"]').focus();
+        };
     </script>
 </body>
 </html>
