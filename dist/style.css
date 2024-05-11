@@ -37,15 +37,6 @@ a {
     margin-right: 8px;
 }
 
-.search-bar button {
-    font-size: 16px;
-    padding: 8px;
-    background-color: #ececec;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .separator {
     border-top: 1px solid #ececec;
     margin: 20px 0;
@@ -117,10 +108,5 @@ a {
     .search-bar input {
         width: 90%; /* Adjust input width for better display on mobile */
         font-size: 14px; /* Decrease font size for input on mobile */
-    }
-
-    .search-bar button {
-        font-size: 14px; /* Decrease font size for button on mobile */
-        margin-top: 10px;
     }
 }

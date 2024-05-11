@@ -25,7 +25,6 @@
             <p>Provided by <a href="https://1234000.xyz">1234000 Services</a></p>
             <div class="search-bar">
                 <input type="text" name="search" placeholder="Search...">
-                <button type="button" name="button">Search</button>
             </div>
         </div>
         <div class="separator"></div>
@@ -43,8 +42,15 @@
             document.body.appendChild(script);
         }
 
-        // Add event listener to search button
-        document.querySelector('button[name="button"]').addEventListener("click", fetchServerData);
+        // Add event listener for enter keypress
+        document.querySelector('input[name="search"]').addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                fetchServerData();
+            }
+        });
 
         // Add event listener to document body for typing event
         document.body.addEventListener("keypress", function(event) {
@@ -87,7 +93,7 @@
                     <strong>Distance:</strong> ${server.distance} mi<br>
                     <strong>Latitude:</strong> ${server.lat}<br>
                     <strong>Longitude:</strong> ${server.lon}<br>
-                    <strong>Preferred:</strong> ${server.preferred ? "yes" : "no"}<br>
+                    <strong>HTTPS Functional:</strong> ${server.https_functional ? "yes" : "no"}<br>
                     <strong>URL:</strong><br> <span class="long-text code" style="font-size: 12px;">${server.url}</span><br>
                     <strong>Host:</strong><br> <span class="long-text code" style="font-size: 12px;">${server.host}</span><br><br>
                 `;
