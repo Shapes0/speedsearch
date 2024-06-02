@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow:
+
+Sitemap: https://speedsearch.1234000.xyz/sitemap.xml
