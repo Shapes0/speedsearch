@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Search for speedtest.net servers and server IDs.">
-    <meta name="keywords" content="speedtest, servers, 1234000 Services, ookla, search">
+    <meta name="description" content="Search for speedtest.net servers and server IDs for Speedtest CLI.">
+    <meta name="keywords" content="speedtest, servers, 1234000 Services, ookla, search, server ID, CLI">
     <meta name="author" content="1234000 Services">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta property="og:title" content="speedtest.net Server Search - Speedsearch">
-    <meta property="og:description" content="Search for speedtest.net servers and server IDs.">
+    <meta property="og:description" content="Search for speedtest.net servers and server IDs for Speedtest CLI.">
     <meta property="og:url" content="https://speedsearch.1234000.xyz">
     <meta property="og:type" content="website">
 
@@ -25,12 +25,46 @@
             <p>Provided by <a href="https://1234000.xyz">1234000 Services</a></p>
             <div class="search-bar">
                 <input type="text" name="search" placeholder="Search...">
+                <button class="info-button" aria-label="Information" onclick="toggleInfo()">ℹ</button>
+            </div>
+
+            <div id="info-panel" class="info-panel" hidden style="display: none;" onclick="toggleInfo()">
+                <div class="info-content" onclick="toggleInfo()">
+                    <button class="close-button" aria-label="Close" onclick="toggleInfo()">×</button>
+
+                    <h3>About Speedsearch</h3>
+                    <p>Speedsearch lets you search the public speedtest.net server database by city, state, country, or ISP/sponsor name and retrieve server IDs for use with the Ookla Speedtest CLI client.</p>
+
+                    <h4>Search examples</h4>
+                    <ul>
+                        <li><strong>Search by City/State:</strong> Chicago(Illinois), Toronto(Ontario), Berlin, Sydney</li>
+                        <li><strong>Search by Sponsor:</strong> Comcast, Rogers, Deutsche Telekom, Telstra</li>
+                        <li><strong>Search by Country:</strong> United States, Canada, Germany, Australia</li>
+                    </ul>
+
+                    <p>Results are fetched directly from Ookla’s public Speedtest API and are updated in real time. Results include sponsor name, location(city, state, country), server ID, distance, coordinates, HTTPS support(required for speedtest.net web client functionality), and full server URLs.</p>
+
+                    <p><a href="https://github.com/Shapes0/speedsearch">Source Code</a></p>
+                </div>
             </div>
         </div>
         <div class="separator"></div>
         <div class="results"></div>
     </div>
     <script>
+        // Toggle info panel
+        function toggleInfo() {
+            const panel = document.getElementById("info-panel");
+
+            if (panel.hidden) {
+                panel.hidden = false;
+                panel.style.display = "flex";
+            } else {
+                panel.hidden = true;
+                panel.style.display = "none";
+            }
+        }
+
         // Function to fetch server data based on search query
         function fetchServerData() {
             // Get search query, trim white space, and encode it
